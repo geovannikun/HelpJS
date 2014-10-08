@@ -1,16 +1,25 @@
-HelpJS = {
+"use strict";
+var HelpJS = {
     array: {
         select: function (array, action) {
-            var array2 = new Array();
-            for (var i = 0; i < array.length; i++) {
-                array2.push(action(array[i]));
+            var result = [];
+            for (var i = 0, length = array.length; i < length; i++) {
+                result.push(action(array[i]));
             }
-            return array2;
+            return result;
         },
-
+        selectBool: function (array, action) {
+            var result = [];
+            for (var i = 0, length = array.length; i < length; i++) {
+                if(action(array[i])){
+                    result.push(array[i]);
+                }
+            }
+            return result;
+        },
         sum: function (array, action) {
             var sum = 0;
-            for (var i = 0; i < array.length; i++) {
+            for (var i = 0, length = array.length; i < length; i++) {
                 sum += action(array[i]);
             }
             return sum;
@@ -23,9 +32,9 @@ HelpJS = {
         },
 
         limit: function (array, limit) {
-            var array2 = new Array();
-            for (var i = 0; i < limit && i < array.length; i++) {
-                array2.push(array[i]);
+            var result = [];
+            for (var i = 0, length = array.length; i < limit && i < length; i++) {
+                result.push(array[i]);
             }
             return array2;
         }
@@ -35,5 +44,10 @@ HelpJS = {
             str = str.toString();
             return str.length < max ? this.pad("0" + str, max) : str;
         }
+    },
+    string: {
+        replaceAll: function (str, find, replace) {
+            return str.replace(new RegExp(find.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'g'), replace);
+        }
     }
-}
+};
