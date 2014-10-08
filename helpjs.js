@@ -1,6 +1,6 @@
 "use strict";
 var HelpJS = {
-    array: {
+    Array: {
         select: function (array, action) {
             var result = [];
             for (var i = 0, length = array.length; i < length; i++) {
@@ -39,19 +39,19 @@ var HelpJS = {
             return array2;
         }
     },
-    number: {
+    Number: {
         pad: function (str, max) {
             str = str.toString();
             return str.length < max ? this.pad("0" + str, max) : str;
         }
     },
-    string: {
+    String: {
         replaceAll: function (str, find, replace) {
             return str.replace(new RegExp(find.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'g'), replace);
         }
     },
-    web:{
-        http: {
+    Web:{
+        Http: {
             methods: {
                 OPTIONS: "OPTIONS",
                 GET: "GET",
@@ -71,24 +71,26 @@ var HelpJS = {
             },
             send: function(url,sucessCallback,errorCallback){
                 url = {
-                    url: url.url + (HelpJS.web.http.objectToParameters(url.parameters)||""),
+                    parameters: (HelpJS.web.http.objectToParameters(url.parameters)||""),
+                    url: url.url,
                     method: url.method||web.http.methods.GET,
                     async: url.async||true,
                     user: url.user||"",
-                    password: url.password||""
+                    password: url.password||"",
+                    data: url.data
                 };
                 var xmlhttp = new XMLHttpRequest();
                 xmlhttp.onreadystatechange=function(){
                     if (xmlhttp.readyState==4){
-                        if(xmlhttp.status==200){
-                            sucessCallback(xmlhttp.responseText);
+                        if(xmlhttp.status>=200 && xmlhttp.status<300){
+                            sucessCallback(xmlhttp.responseText, xmlhttp.status);
                         }else {
-                            errorCallback(xmlhttp.statusText);
+                            errorCallback(xmlhttp.responseText, xmlhttp.status);
                         }
                     }
                 };
-                xmlhttp.open(url.method,url.url,url.async,url.user,url.password);
-                xmlhttp.send();
+                xmlhttp.open(url.method, url.url + url.parameters, url.async, url.user, url.password);
+                (url.data)?xmlhttp.send(url.data):xmlhttp.send();
             }
         }
     }
