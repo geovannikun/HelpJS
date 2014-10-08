@@ -49,5 +49,47 @@ var HelpJS = {
         replaceAll: function (str, find, replace) {
             return str.replace(new RegExp(find.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'g'), replace);
         }
+    },
+    web:{
+        http: {
+            methods: {
+                OPTIONS: "OPTIONS",
+                GET: "GET",
+                HEAD: "HEAD",
+                POST: "POST",
+                PUT: "PUT",
+                DELETE: "DELETE",
+                TRACE: "TRACE",
+                CONNECT: "CONNECT"
+            },
+            objectToParameters: function(object){
+                var result = [];
+                for(var propertie in object){
+                    result.push(propertie + ":" + object[propertie]);
+                }
+                return "?"+result.join("&");
+            },
+            send: function(url,sucessCallback,errorCallback){
+                url = {
+                    url: url.url + (HelpJS.web.http.objectToParameters(url.parameters)||""),
+                    method: url.method||web.http.methods.GET,
+                    async: url.async||true,
+                    user: url.user||"",
+                    password: url.password||""
+                };
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange=function(){
+                    if (xmlhttp.readyState==4){
+                        if(xmlhttp.status==200){
+                            sucessCallback(xmlhttp.responseText);
+                        }else {
+                            errorCallback(xmlhttp.statusText);
+                        }
+                    }
+                };
+                xmlhttp.open(url.method,url.url,url.async,url.user,url.password);
+                xmlhttp.send();
+            }
+        }
     }
 };
