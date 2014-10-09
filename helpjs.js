@@ -8,7 +8,7 @@ var HelpJS = {
             }
             return result;
         },
-        selectBool: function (array, action) {
+        where: function (array, action) {
             var result = [];
             for (var i = 0, length = array.length; i < length; i++) {
                 if(action(array[i])){
@@ -24,19 +24,26 @@ var HelpJS = {
             }
             return sum;
         },
-
         clear: function (array) {
             while (array.length) {
                 array.pop();
             }
         },
-
         limit: function (array, limit) {
             var result = [];
             for (var i = 0, length = array.length; i < limit && i < length; i++) {
                 result.push(array[i]);
             }
-            return array2;
+            return result;
+        },
+        keys: function (array) {
+            result = [];
+            for (var key in Object.keys(array)) {
+                if (arr.hasOwnProperty(key)) {
+                    result.push(array[i]);
+                }
+            }
+            return result;
         }
     },
     Number: {
