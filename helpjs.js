@@ -82,15 +82,16 @@ var HelpJS = {
             }
             return "?"+result.join("&");
         },
-        send: function(url,sucessCallback,errorCallback){
-            url = {
-                parameters: (HelpJS.web.http.objectToParameters(url.parameters)||""),
-                url: url.url,
-                method: url.method||web.http.methods.GET,
-                async: url.async||true,
-                user: url.user||"",
-                password: url.password||"",
-                data: url.data
+        send: function(request,sucessCallback,errorCallback){
+            request = {
+                parameters: (request.parameters?HelpJS.Http.objectToParameters(request.parameters):""),
+                url: request.url,
+                method: request.method||request.http.methods.GET,
+                async: request.async||true,
+                user: request.user||"",
+                password: request.password||"",
+                data: request.data,
+                headers: request.headers||{}
             };
             var xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange=function(){
@@ -103,6 +104,9 @@ var HelpJS = {
                 }
             };
             xmlhttp.open(url.method, url.url + url.parameters, url.async, url.user, url.password);
+            for(var propertie in url.headers){
+            	xmlhttp.setRequestHeader(propertie, object[propertie]);
+            }
             (url.data)?xmlhttp.send(url.data):xmlhttp.send();
         }
     }
