@@ -135,11 +135,11 @@ var HelpJS = {
 					}
 				}
 			};
-			xmlhttp.open(url.method, url.url + url.parameters, url.async, url.user, url.password);
-			for(var propertie in url.headers){
+			xmlhttp.open(request.method, request.url + request.parameters, request.async, request.user, request.password);
+			for(var propertie in request.headers){
 				xmlhttp.setRequestHeader(propertie, object[propertie]);
 			}
-			(url.data)?xmlhttp.send(url.data):xmlhttp.send();
+			(request.data)?xmlhttp.send(request.data):xmlhttp.send();
 		}
 	}
 };
