@@ -137,7 +137,7 @@ var HelpJS = {
 			};
 			xmlhttp.open(request.method, request.url + request.parameters, request.async, request.user, request.password);
 			for(var propertie in request.headers){
-				xmlhttp.setRequestHeader(propertie, object[propertie]);
+				xmlhttp.setRequestHeader(propertie, request.headers[propertie]);
 			}
 			(request.data)?xmlhttp.send(request.data):xmlhttp.send();
 		}
