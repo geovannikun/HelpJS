@@ -49,7 +49,7 @@ var HelpJS = {
     Number: {
         pad: function (str, max) {
             str = str.toString();
-            return str.length < max ? this.pad("0" + str, max) : str;
+            return str.length < max ? HelpJS.Number.pad("0" + str, max) : str;
         }
     },
     String: {
@@ -58,6 +58,38 @@ var HelpJS = {
         }
     },
     Http: {
+		Cookie: {
+			set: function(key,value,life){
+				var d = new Date();
+				d.setTime(d.getTime() + (life*86400000));
+				var expires = "expires="+d.toGMTString();
+				document.cookie = key + "=" + value + "; " + expires;
+			},
+			get: function(key){
+				var cookies = document.cookie.split(";");
+				for(var i = cookies.length-1; i > -1; i--) {
+					var cookieData = cookies[i].replace(" ","").split("=");
+					if(cookieData[0] === key) {
+						return cookieData[1];
+					}
+				}
+				return null;
+			},
+			remove: function(key){
+				var d = new Date();
+				d.setTime(d.getTime() + -1);
+				var expires = "expires="+d.toGMTString();
+				document.cookie = key + "=''; " + expires;
+			},
+			has: function(key){
+				rgx = new RegExp(/;?[ ]?([a-z]+)=/gi);
+				while((array = rgx.exec(document.cookie)) != null) {
+					if(array[1] === key)
+						return true;
+				}
+				return false;
+			},
+		},
         methods: {
             OPTIONS: "OPTIONS",
             GET: "GET",
@@ -78,7 +110,7 @@ var HelpJS = {
         objectToParameters: function(object){
             var result = [];
             for(var propertie in object){
-                result.push(propertie + ":" + object[propertie]);
+                result.push(propertie + "=" + object[propertie]);
             }
             return "?"+result.join("&");
         },
@@ -86,7 +118,7 @@ var HelpJS = {
             request = {
                 parameters: (request.parameters?HelpJS.Http.objectToParameters(request.parameters):""),
                 url: request.url,
-                method: request.method||request.http.methods.GET,
+                method: request.method||"GET",
                 async: request.async||true,
                 user: request.user||"",
                 password: request.password||"",
