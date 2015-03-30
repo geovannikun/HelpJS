@@ -103,7 +103,7 @@ var HelpJS = {
 		parametersToObject: function(url){
 			var result = {};
 			for(var propertie in url.split("?")[1].split("&")){
-				result[propertie.split(":")[0]] = unescape(propertie.split(":")[1]);
+				result[propertie.split("=")[0]] = unescape(propertie.split("=")[1]);
 			}
 			return result;
 		},
